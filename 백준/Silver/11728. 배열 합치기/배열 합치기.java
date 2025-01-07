@@ -7,7 +7,7 @@ public class Main {
 	static StringBuilder sb = new StringBuilder();
 
 	static int N, M;
-	static List<Integer> list = new ArrayList<>();
+	static int[] A, B, arr;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -18,20 +18,47 @@ public class Main {
 		stk();
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
+		A = new int[N + M];
+		B = new int[M + N];
 		stk();
 		for (int i = 0; i < N; i++) {
-			list.add(Integer.parseInt(st.nextToken()));
+			A[i] = Integer.parseInt(st.nextToken());
 		}
 		stk();
 		for (int i = 0; i < M; i++) {
-			list.add(Integer.parseInt(st.nextToken()));
+			B[i] = Integer.parseInt(st.nextToken());
 		}
 	}
 
 	static void pro() throws IOException {
-		Collections.sort(list);
-		for (int i = 0; i < list.size(); i++) {
-			sb.append(list.get(i)).append(" ");
+		arr = new int[N + M + 1];
+		int s = 0, e = 0;
+		int idx = 0;
+		while (s + e < N + M) {
+			if (s == N) {
+				arr[idx] = B[e];
+				idx++;
+				e++;
+				continue;
+			}
+			if (e == M) {
+				arr[idx] = A[s];
+				idx++;
+				s++;
+				continue;
+			}
+			if (A[s] > B[e]) {
+				arr[idx] = B[e];
+				idx++;
+				e++;
+			} else {
+				arr[idx] = A[s];
+				idx++;
+				s++;
+			}
+		}
+		for (int i = 0; i < N + M; i++) {
+			sb.append(arr[i]).append(" ");
 		}
 		System.out.println(sb.toString());
 	}
