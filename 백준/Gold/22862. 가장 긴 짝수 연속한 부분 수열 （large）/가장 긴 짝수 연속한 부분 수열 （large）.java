@@ -33,15 +33,13 @@ public class Main {
 		while (e < N) {
 			if (arr[e] % 2 != 0) {
 				if (cnt == K) {
-					for (int i = s; i < list.get(idx); i++) {
-						if (arr[i] % 2 == 0)
-							len--;
+					if (arr[s] % 2 != 0) {
+						cnt--;
+					} else {
+						len--;
 					}
-					s = list.get(idx) + 1;
-					idx++;
-					cnt--;
+					s++;
 				} else {
-					list.add(e);
 					cnt++;
 					e++;
 				}
