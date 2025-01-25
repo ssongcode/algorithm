@@ -26,30 +26,31 @@ public class Main {
 	}
 
 	static void pro() throws IOException {
-		int s, e, x, y;
+		int s, e, mid, x, y;
 		int min = Integer.MAX_VALUE, tmp, ans = 0;
+
 		// 임의의 그룹 선택
 		for (int i = 1; i <= N; i++) {
-			for (int j = i; j <= N; j++) {
-				x = prefix[j] - prefix[i - 1]; // x 그룹의 합
-				s = j + 1;
-				e = j + 1;
-				while (e < N + 1) {
-					y = prefix[e] - prefix[s - 1]; // y 그룹의 합
+			for (int j = i + 1; j <= N; j++) {
+				s = i;
+				e = j;
+				while (s <= e) {
+					mid = (s + e) / 2;
+					x = prefix[mid] - prefix[i - 1];
+					y = prefix[j] - prefix[mid];
+
 					tmp = Math.abs(x - y);
 					if (tmp < min) {
 						min = tmp;
-						ans = x + y;
-						e++;
+						ans = prefix[j] - prefix[i - 1];
 					} else if (tmp == min) {
-						ans = Math.max(ans, x + y);
-						e++;
-					} else {
-						if (x > y)
-							e++;
-						else
-							break;
+						ans = Math.max(ans, prefix[j] - prefix[i - 1]);
+						s = mid + 1;
 					}
+					if (x > y)
+						e = mid - 1;
+					else
+						s = mid + 1;
 				}
 			}
 		}
