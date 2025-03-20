@@ -5,14 +5,10 @@ public class Main {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
 	static StringBuilder sb = new StringBuilder();
-	static String endl = "\n";
-	static String blank = " ";
 
 	static int N, S;
 	static int[] arr;
-	static int[] output;
-	static boolean[] visited;
-	static int cnt;
+	static int sum = 0, ans = 0;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -31,37 +27,19 @@ public class Main {
 	}
 
 	static void pro() throws IOException {
-		visited = new boolean[N];
-
-		for (int i = 1; i <= N; i++) {
-			output = new int[i];
-			recur(0, 0, i);
-		}
-
-		System.out.println(cnt);
-
+		recur(0, 0, sum);
+		System.out.println(ans);
 	}
 
-	static void recur(int cur, int start, int n) throws IOException {
-		int sum = 0;
-		if (cur == n) {
-			for (int i = 0; i < n; i++) {
-				sum += output[i];
-			}
-			if (sum == S)
-				cnt++;
+	static void recur(int cur, int cnt, int sum) throws IOException {
+		if (cur == N) {
+			if (cnt != 0 && sum == S)
+				ans++;
 			return;
 		}
 
-		for (int i = start; i < N; i++) {
-			if (visited[i])
-				continue;
-			output[cur] = arr[i];
-			visited[i] = true;
-			recur(cur + 1, i + 1, n);
-			visited[i] = false;
-		}
-
+		recur(cur + 1, cnt + 1, sum + arr[cur]);
+		recur(cur + 1, cnt, sum);
 	}
 
 	static void stk() throws IOException {
