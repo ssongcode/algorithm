@@ -6,10 +6,9 @@ public class Main {
 	static StringTokenizer st;
 	static StringBuilder sb = new StringBuilder();
 
-	static int N, M, n;
-	static int[] ch, arr, lst;
+	static int N, M;
 	static boolean[] visited;
-	static int ans = Integer.MAX_VALUE;
+	static int ans;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -17,75 +16,38 @@ public class Main {
 	}
 
 	static void input() throws IOException {
-		String str = br.readLine();
-		n = str.length();
-		arr = new int[n];
-		N = Integer.parseInt(str);
+		N = Integer.parseInt(br.readLine());
 		M = Integer.parseInt(br.readLine());
-		if (M != 0) {
-			ch = new int[M];
+
+		visited = new boolean[10];
+		if (M > 0) {
 			stk();
 			for (int i = 0; i < M; i++) {
-				ch[i] = Integer.parseInt(st.nextToken());
+				int num = Integer.parseInt(st.nextToken());
+				visited[num] = true;
 			}
 		}
 	}
 
 	static void pro() throws IOException {
-		int tmp = N, mod = 0, idx = n - 1;
-		while (tmp > 0) {
-			mod = tmp % 10;
-			arr[idx] = mod;
-			tmp /= 10;
-			idx--;
-		}
-
-		visited = new boolean[10];
-		for (int i = 0; i < M; i++) {
-			visited[ch[i]] = true;
-		}
-        
-		lst = new int[n + 1];
-        
-		recur(0);
-        if (ans == Integer.MAX_VALUE)
-			ans = Math.abs(N - 100);
-        
+		ans = Math.abs(N - 100);
+		recur(0, 0);
 		System.out.println(ans);
 	}
 
-	static void recur(int cur) throws IOException {
+	static void recur(int cur, int num) throws IOException {
 		if (cur > 0)
-			check(cur);
+			ans = Math.min(Math.abs(N - num) + cur, ans);
 
-		if (cur == n + 1) {
+		if (cur == 7) {
 			return;
 		}
 
 		for (int i = 0; i < 10; i++) {
 			if (visited[i])
 				continue;
-			lst[cur] = i;
-			recur(cur + 1);
+			recur(cur + 1, num * 10 + i);
 		}
-	}
-
-	static void check(int n) throws IOException {
-		sb = new StringBuilder();
-		for (int i = 0; i < n; i++) {
-			sb.append(lst[i]);
-		}
-		int num = Integer.parseInt(sb.toString());
-		int tmp = num, cnt = 0;
-		while (tmp > 0) {
-			cnt++;
-			tmp /= 10;
-		}
-		if (num == 0)
-			cnt = 1;
-        
-		ans = Math.min(Math.abs(N - num) + cnt, ans);
-		ans = Math.min(ans, Math.abs(N - 100));
 	}
 
 	static void stk() throws IOException {
