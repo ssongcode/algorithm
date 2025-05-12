@@ -1,89 +1,82 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-	static StringBuilder sb = new StringBuilder();
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
-	static BufferedReader br;
+	static StringBuilder sb = new StringBuilder();
 
-	static String endl = "\n";
-	static String blank = " ";
-	
-	static int N;
-	static int p, f, s, v;
-	static int[][] board;
-	static int[] sel;
-	static int ans = Integer.MAX_VALUE;
-	static boolean flag = false;
-	
+	static int N, min;
+	static int[][] arr;
+	static int[] base;
+	static List<Integer> list, answer;
+
+	public static void main(String[] args) throws IOException {
+		input();
+		pro();
+	}
+
 	static void input() throws IOException {
-		br = new BufferedReader(new InputStreamReader(System.in));
 		N = Integer.parseInt(br.readLine());
+		base = new int[4];
 		stk();
-		p = Integer.parseInt(st.nextToken());
-		f = Integer.parseInt(st.nextToken());
-		s = Integer.parseInt(st.nextToken());
-		v = Integer.parseInt(st.nextToken());
-		board = new int[N+1][5];
-		sel = new int[N+1];
-		for (int i = 1; i <= N; i++) {
+		for (int i = 0; i < 4; i++) {
+			base[i] = Integer.parseInt(st.nextToken());
+		}
+		arr = new int[N][5];
+		for (int i = 0; i < N; i++) {
 			stk();
 			for (int j = 0; j < 5; j++) {
-				board[i][j] = Integer.parseInt(st.nextToken());
+				arr[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
 	}
 
 	static void pro() throws IOException {
-		recur(1, 0, 0, 0, 0, 0);
-		if(flag) {
-            System.out.println(ans);
-            System.out.println(sb);
-        }
-        else {
-            System.out.println(-1);
-        }
-	}
-	
-	// 1~6개 중에서 부분집합
-	static void recur(int cur, int sumP, int sumF, int sumS, int sumV, int price) {
-		if (sumP >= p && sumF >= f && sumS >=s && sumV >= v) {
-			if (price < ans) {
-				flag = true;
-				sb = new StringBuilder();
-				ans = price;
-				for (int i = 1; i <= N; i++) {
-					if (sel[i] == 1) {
-						sb.append(i).append(blank);
-					}
-				}
+		min = Integer.MAX_VALUE;
+		list = new ArrayList<Integer>();
+		int[] sum = new int[5];
+
+		recur(0, sum);
+
+		if (min == Integer.MAX_VALUE)
+			System.out.println(-1);
+		else {
+			System.out.println(min);
+			for (int i = 0; i < answer.size(); i++) {
+				System.out.print(answer.get(i) + " ");
 			}
-			return;
 		}
-		if (cur == N + 1) {
-			if (sumP >= p && sumF >= f && sumS >=s && sumV >= v) {
-				if (price < ans) {
-					flag = true;
-					sb = new StringBuilder();
-					ans = price;
-					for (int i = 1; i <= N; i++) {
-						if (sel[i] == 1) {
-							sb.append(i).append(blank);
-						}
-					}
-				}
-			}
-			return;
-		}
-		sel[cur] = 1;
-		recur(cur+1, sumP+board[cur][0], sumF+board[cur][1], sumS+board[cur][2], sumV+board[cur][3], price+board[cur][4]);
-		sel[cur] = 0;
-		recur(cur+1, sumP, sumF, sumS, sumV, price);
 	}
 
-	public static void main(String[] args) throws IOException {
-		input();
-		pro();
+	static void recur(int cur, int[] sum) throws IOException {
+		if (cur == N)
+			return;
+
+		int[] tmp = new int[5];
+		for (int i = 0; i < 5; i++) {
+			tmp[i] = sum[i] + arr[cur][i];
+		}
+		list.add(cur + 1);
+
+		boolean flag = true;
+		for (int i = 0; i < 4; i++) {
+			if (tmp[i] < base[i]) {
+				flag = false;
+				break;
+			}
+		}
+		if (flag) {
+			if (min > tmp[4]) {
+				min = tmp[4];
+				answer = new ArrayList<Integer>(list);
+			}
+		}
+
+		recur(cur + 1, tmp);
+		list.remove(list.size() - 1);
+
+		recur(cur + 1, sum);
 	}
 
 	static void stk() throws IOException {
