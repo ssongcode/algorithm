@@ -5,11 +5,10 @@ public class Main {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
 	static StringBuilder sb = new StringBuilder();
-	static String endl = "\n";
-	static String blank = " ";
 
 	static int N, K;
-	static int[][] stat;
+	static int[][] arr;
+	static int[] power, speed, intelligence;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -20,33 +19,39 @@ public class Main {
 		stk();
 		N = Integer.parseInt(st.nextToken());
 		K = Integer.parseInt(st.nextToken());
-		stat = new int[N][3];
-
+		arr = new int[N][3];
+		power = new int[N];
+		speed = new int[N];
+		intelligence = new int[N];
 		for (int i = 0; i < N; i++) {
 			stk();
 			for (int j = 0; j < 3; j++) {
-				stat[i][j] = Integer.parseInt(st.nextToken());
+				arr[i][j] = Integer.parseInt(st.nextToken());
+				if (j == 0) power[i] = arr[i][j];
+				if (j == 1) speed[i] = arr[i][j];
+				if (j == 2) intelligence[i] = arr[i][j];
 			}
 		}
 	}
 
 	static void pro() throws IOException {
-		int cnt = 0;
-		int min = Integer.MAX_VALUE;
-		int p, s, i;
-		for (int a = 0; a < N; a++) {
-			for (int b = 0; b < N; b++) {
-				for (int c = 0; c < N; c++) {
-					p = stat[a][0];
-					s = stat[b][1];
-					i = stat[c][2];
+		int p, s, in, sum, cnt;
+		int min = 10000000;
+		for (int i = 0; i < N; i++) {
+			for(int j = 0; j < N; j++) {
+				for(int k = 0; k < N; k++) {
+					p = power[i];
+					s = speed[j];
+					in = intelligence[k];
+					sum = p + s + in;
 					cnt = 0;
-					for (int x = 0; x < N; x++) {
-						if (p >= stat[x][0] && s >= stat[x][1] && i >= stat[x][2])
+					for(int l = 0; l < N; l++) {
+						if(p >= arr[l][0] && s >= arr[l][1] && in >= arr[l][2]) {
 							cnt++;
-					}
-					if (cnt >= K) {
-						min = Math.min(min, p + s + i);
+						}
+						if(cnt >= K) {
+							min = Math.min(min, sum);
+						}
 					}
 				}
 			}
