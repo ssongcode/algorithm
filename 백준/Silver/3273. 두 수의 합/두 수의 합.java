@@ -29,12 +29,14 @@ public class Main {
 		int s = 0, e = n - 1;
 		int cnt = 0;
 		while (s < e) {
-			if (arr[s] + arr[e] > x)
-				e--;
-			else if (arr[s] + arr[e] < x)
-				s++;
-			else {
+			if (arr[s] + arr[e] == x) {
 				cnt++;
+				s++;
+				e--;
+			}
+			else if (arr[s] + arr[e] > x)
+				e--;
+			else {
 				s++;
 			}
 		}
