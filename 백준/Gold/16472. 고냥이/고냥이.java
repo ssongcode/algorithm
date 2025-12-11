@@ -21,38 +21,26 @@ public class Main {
 
 	static void pro() throws IOException {
 		int s = 0, e = 0;
-		int cnt = 1, len = 1;
-		int max = 0;
-		char chS, chE;
-		boolean[] visited;
-		visited = new boolean[30];
-		chS = str.charAt(s);
-		visited[chS - 'a'] = true;
-		e++;
-		while (e < str.length()) {
-			chE = str.charAt(e);
-			if (visited[chE - 'a']) {
-				len++;
-			} else {
-				visited[chE - 'a'] = true;
-				cnt++;
-				len++;
-			}
-			if (cnt == N + 1) {
-				len--;
-				max = Math.max(max, len);
-				s++;
-				e = s;
-				visited = new boolean[30];
-				cnt = 1;
-				len = 1;
-				chS = str.charAt(s);
-				visited[chS - 'a'] = true;
-			} else {
-				max = Math.max(max, len);
-			}
-			e++;
+		int[] isUsed = new int[130];
+		int num = 0, cnt = 0, len = 0, max = 0;
 
+		while (e < str.length()) {
+			num = str.charAt(e);
+			if (isUsed[num] == 0) {
+				cnt++;
+			}
+			isUsed[num]++;
+			e++;
+			len++;
+			while (cnt > N) {
+				num = (int) str.charAt(s);
+				isUsed[num]--;
+				if (isUsed[num] == 0)
+					cnt--;
+				s++;
+				len--;
+			}
+			max = Math.max(len, max);
 		}
 		System.out.println(max);
 	}
