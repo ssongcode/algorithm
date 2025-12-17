@@ -30,13 +30,13 @@ public class Main {
 	}
 
 	static void pro() throws IOException {
-		int max = Integer.MIN_VALUE;
-		for (int x1 = 1; x1 <= N; x1++) {
-			for (int y1 = 1; y1 <= M; y1++) {
-				for (int x2 = x1; x2 <= N; x2++) {
-					for (int y2 = y1; y2 <= M; y2++) {
-						max = Math.max(max,
-								(prefix[x2][y2] - prefix[x2][y1 - 1] - prefix[x1 - 1][y2] + prefix[x1 - 1][y1 - 1]));
+		int sum = 0, max = Integer.MIN_VALUE;
+		for (int i1 = 1; i1 <= N; i1++) {
+			for (int j1 = 1; j1 <= M; j1++) {
+				for (int i2 = i1; i2 <= N; i2++) {
+					for (int j2 = j1; j2 <= M; j2++) {
+						sum = prefix[i2][j2] - prefix[i1 - 1][j2] - prefix[i2][j1 - 1] + prefix[i1 - 1][j1 - 1];
+						max = Math.max(max, sum);
 					}
 				}
 			}
