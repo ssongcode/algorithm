@@ -27,29 +27,24 @@ public class Main {
 
 	static void pro() throws IOException {
 		Arrays.sort(arr);
-		int s = 0, e = arr[N - 1], mid = 0, ans = 0;
+		int s = 0, e = arr[N - 1], mid;
+		long sum;
+		int max = 0;
 		while (s <= e) {
+			// mid : 자를 높이
 			mid = (s + e) / 2;
-			if (check(mid)) {
-				ans = mid;
+			sum = 0;
+			for (int i = 0; i < N; i++) {
+				if (arr[i] > mid)
+					sum += arr[i] - mid;
+			}
+			if (sum >= M) {
+				max = Math.max(max, mid);
 				s = mid + 1;
 			} else
 				e = mid - 1;
 		}
-		System.out.println(ans);
-	}
-
-	static boolean check(int h) throws IOException {
-		long sum = 0;
-		for (int i = 0; i < N; i++) {
-			if ((arr[i] - h) <= 0)
-				continue;
-			sum += (arr[i] - h);
-		}
-		if (sum >= M)
-			return true;
-		else
-			return false;
+		System.out.println(max);
 	}
 
 	static void stk() throws IOException {
