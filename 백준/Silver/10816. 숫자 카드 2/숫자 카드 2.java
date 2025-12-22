@@ -7,7 +7,7 @@ public class Main {
 	static StringBuilder sb = new StringBuilder();
 
 	static int N, M;
-	static int[] arr, brr;
+	static int[] arr, num;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -22,57 +22,59 @@ public class Main {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
 		M = Integer.parseInt(br.readLine());
-		brr = new int[M];
+		num = new int[M];
 		stk();
 		for (int i = 0; i < M; i++) {
-			brr[i] = Integer.parseInt(st.nextToken());
+			num[i] = Integer.parseInt(st.nextToken());
 		}
 	}
 
 	static void pro() throws IOException {
 		Arrays.sort(arr);
-		int s, e;
+		int tmp, s, e, ans;
 		for (int i = 0; i < M; i++) {
-			s = 0;
-			e = N - 1;
-//			System.out.print(lowerBound(s, e, brr[i]) + " ");
-//			System.out.println(upperBound(s, e, brr[i]));
-			sb.append(upperBound(s, e, brr[i]) - lowerBound(s, e, brr[i])).append(" ");
-//			System.out.println(upperBound(s, e, brr[i]) - lowerBound(s, e, brr[i]));
+			tmp = num[i];
+			s = lowerBound(tmp);
+			e = upperBound(tmp);
+			if (s == -1 && e == -1)
+				ans = 0;
+			else
+				ans = e - s + 1;
+			sb.append(ans).append(" ");
 		}
 		System.out.println(sb.toString());
 	}
 
-	static int lowerBound(int s, int e, int num) throws IOException {
-		int mid = 0, ans = -1;
+	static int lowerBound(int tmp) throws IOException {
+		int s = 0, e = N - 1, mid;
+		int idx = -1;
 		while (s <= e) {
 			mid = (s + e) / 2;
-			if (arr[mid] >= num) {
-				ans = mid;
+			if (arr[mid] == tmp) {
+				idx = mid;
 				e = mid - 1;
-			} else
+			} else if (arr[mid] > tmp)
+				e = mid - 1;
+			else
 				s = mid + 1;
 		}
-		if (ans == -1)
-			return N;
-		else
-			return ans;
+		return idx;
 	}
 
-	static int upperBound(int s, int e, int num) throws IOException {
-		int mid = 0, ans = -1;
+	static int upperBound(int tmp) throws IOException {
+		int s = 0, e = N - 1, mid;
+		int idx = -1;
 		while (s <= e) {
 			mid = (s + e) / 2;
-			if (arr[mid] > num) {
-				ans = mid;
+			if (arr[mid] == tmp) {
+				idx = mid;
+				s = mid + 1;
+			} else if (arr[mid] > tmp)
 				e = mid - 1;
-			} else
+			else
 				s = mid + 1;
 		}
-		if (ans == -1)
-			return N;
-		else
-			return ans;
+		return idx;
 	}
 
 	static void stk() throws IOException {
