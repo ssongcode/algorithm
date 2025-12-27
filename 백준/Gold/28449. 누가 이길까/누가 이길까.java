@@ -7,7 +7,7 @@ public class Main {
 	static StringBuilder sb = new StringBuilder();
 
 	static int N, M;
-	static int[] hi, arc;
+	static int[] nArr, mArr;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -18,59 +18,59 @@ public class Main {
 		stk();
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
-		hi = new int[N];
-		arc = new int[M];
+		nArr = new int[N];
+		mArr = new int[M];
 		stk();
 		for (int i = 0; i < N; i++) {
-			hi[i] = Integer.parseInt(st.nextToken());
+			nArr[i] = Integer.parseInt(st.nextToken());
 		}
 		stk();
 		for (int i = 0; i < M; i++) {
-			arc[i] = Integer.parseInt(st.nextToken());
+			mArr[i] = Integer.parseInt(st.nextToken());
 		}
 	}
 
 	static void pro() throws IOException {
-		Arrays.sort(hi);
-		Arrays.sort(arc);
-
-		int num;
-		long hWin = 0, aWin = 0, draw = 0;
+		Arrays.sort(mArr);
+		long a = 0, b = 0, c = 0;
+		int num, lower, upper;
 		for (int i = 0; i < N; i++) {
-			num = hi[i]; // 찾아야 할 수
-			hWin += lowerBound(num);
-			aWin += M - upperBound(num);
-			draw += (upperBound(num) - lowerBound(num));
+			num = nArr[i];
+			lower = lowerBound(num);
+			upper = upperBound(num);
+			a += lower;
+			b += (upper - lower);
+			c += (M - upper);
 		}
-		System.out.println(hWin + " " + aWin + " " + draw);
-
-	}
-
-	static int upperBound(int num) throws IOException {
-		int s = 0, e = M - 1, ans = M, mid;
-		while (s <= e) {
-			mid = (s + e) / 2;
-			if (arc[mid] > num) {
-				ans = mid;
-				e = mid - 1;
-			} else
-				s = mid + 1;
-		}
-		return ans;
+		System.out.println(a + " " + c + " " + b);
 	}
 
 	static int lowerBound(int num) throws IOException {
-		int s = 0, e = M - 1, ans = M, mid;
+		int s = 0, e = M - 1;
+		int ans = M;
 		while (s <= e) {
-			mid = (s + e) / 2;
-			if (arc[mid] >= num) {
+			int mid = (s + e) / 2;
+			if (mArr[mid] >= num) {
 				ans = mid;
 				e = mid - 1;
 			} else
 				s = mid + 1;
 		}
 		return ans;
+	}
 
+	static int upperBound(int num) throws IOException {
+		int s = 0, e = M - 1;
+		int ans = M;
+		while (s <= e) {
+			int mid = (s + e) / 2;
+			if (mArr[mid] > num) {
+				ans = mid;
+				e = mid - 1;
+			} else
+				s = mid + 1;
+		}
+		return ans;
 	}
 
 	static void stk() throws IOException {
