@@ -5,12 +5,9 @@ public class Main {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
 	static StringBuilder sb = new StringBuilder();
-	static String endl = "\n";
-	static String blank = " ";
 
 	static int N, M;
 	static int[] output;
-	static boolean[] visited;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -25,26 +22,22 @@ public class Main {
 
 	static void pro() throws IOException {
 		output = new int[M];
-		visited = new boolean[N + 1];
 		recur(0, 1);
+		System.out.println(sb.toString());
 	}
 
 	static void recur(int cur, int start) throws IOException {
 		if (cur == M) {
 			for (int i = 0; i < M; i++) {
-				System.out.print(output[i] + " ");
+				sb.append(output[i]).append(" ");
 			}
-			System.out.println();
+			sb.append("\n");
 			return;
 		}
 
 		for (int i = start; i <= N; i++) {
-			if (visited[i])
-				continue;
 			output[cur] = i;
-			visited[i] = true;
 			recur(cur + 1, i + 1);
-			visited[i] = false;
 		}
 	}
 
