@@ -7,8 +7,8 @@ public class Main {
 	static StringBuilder sb = new StringBuilder();
 
 	static int N, S;
-	static int[] arr;
-	static int sum = 0, ans = 0;
+	static int[] arr, output;
+	static int cnt = 0;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -27,19 +27,25 @@ public class Main {
 	}
 
 	static void pro() throws IOException {
-		recur(0, 0, sum);
-		System.out.println(ans);
+		output = new int[N];
+		recur(0, 0, 0);
+		System.out.println(cnt);
 	}
 
-	static void recur(int cur, int cnt, int sum) throws IOException {
+	static void recur(int cur, int start, int sum) throws IOException {
+		if (cur != 0 && sum == S)
+			cnt++;
+
 		if (cur == N) {
-			if (cnt != 0 && sum == S)
-				ans++;
 			return;
 		}
 
-		recur(cur + 1, cnt + 1, sum + arr[cur]);
-		recur(cur + 1, cnt, sum);
+		for (int i = start; i < N; i++) {
+			output[cur] = arr[i];
+			sum += arr[i];
+			recur(cur + 1, i + 1, sum);
+			sum -= arr[i];
+		}
 	}
 
 	static void stk() throws IOException {
