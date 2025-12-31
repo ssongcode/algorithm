@@ -5,14 +5,10 @@ public class Main {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
 	static StringBuilder sb = new StringBuilder();
-	static String endl = "\n";
-	static String blank = " ";
 
 	static int N, L, R, X;
-	static int[] arr;
-	static int[] ans;
-	static boolean[] visited;
-	static int cnt;
+	static int[] arr, output;
+	static int cnt = 0;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -32,48 +28,41 @@ public class Main {
 		}
 	}
 
-//	N : 문제 수
-//	L <= 난이도 합 <= R
-//	가장 어려운 문제 난이도 - 가장 쉬운 문제 난이도 >= X
-
 	static void pro() throws IOException {
 		Arrays.sort(arr);
-		visited = new boolean[N];
-		for (int i = 2; i <= N; i++) {
-			ans = new int[i];
-			recur(0, 0, i);
+		for (int i = 1; i <= N; i++) {
+			output = new int[i];
+			recur(0, 0, i, 0);
 		}
+
 		System.out.println(cnt);
+
 	}
 
-	static void recur(int cur, int start, int n) {
-		if (cur == n) {
-			if (!check(ans, n))
+	static void recur(int cur, int start, int len, int sum) throws IOException {
+		if (cur == len) {
+			if (!check(cur, sum))
 				return;
 			cnt++;
 			return;
 		}
 
 		for (int i = start; i < N; i++) {
-			if (visited[i])
-				continue;
-			ans[cur] = arr[i];
-			visited[i] = true;
-			recur(cur + 1, i + 1, n);
-			visited[i] = false;
+			output[cur] = arr[i];
+			sum += arr[i];
+			recur(cur + 1, i + 1, len, sum);
+			sum -= arr[i];
 		}
+
 	}
 
-	static boolean check(int[] arr, int len) {
-		long sum = 0;
-		for (int i = 0; i < len; i++) {
-			sum += arr[i];
-		}
+	static boolean check(int cur, int sum) throws IOException {
 		if (sum < L || sum > R)
 			return false;
-		if (arr[len - 1] - arr[0] < X)
+		if (output[cur - 1] - output[0] < X)
 			return false;
 		return true;
+
 	}
 
 	static void stk() throws IOException {
