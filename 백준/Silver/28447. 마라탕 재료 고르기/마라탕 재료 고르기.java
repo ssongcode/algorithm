@@ -8,8 +8,8 @@ public class Main {
 
 	static int N, K;
 	static int[][] arr;
-	static int[] ans;
-	static int max = Integer.MIN_VALUE;
+	static int[] lst;
+	static int ans = Integer.MIN_VALUE;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -30,28 +30,40 @@ public class Main {
 	}
 
 	static void pro() throws IOException {
-		ans = new int[N];
+		lst = new int[K];
+
 		recur(0, 0);
-		System.out.println(max);
+
+		System.out.println(ans);
 	}
 
 	static void recur(int cur, int cnt) throws IOException {
-		if (cur == N) {
-			if (cnt != K)
-				return;
-			int sum = 0;
-			for (int i = 0; i < cnt; i++) {
-				for (int j = i + 1; j < cnt; j++) {
-					sum += arr[ans[i]][ans[j]];
-				}
-			}
-			max = Math.max(max, sum);
+		if (cnt == K) {
+			// 최댓값 갱신
+			ans = Math.max(ans, getTaste());
 			return;
 		}
 
-		ans[cnt] = cur;
+		if (cur == N)
+			return;
+
+		lst[cnt] = cur;
+
 		recur(cur + 1, cnt + 1);
 		recur(cur + 1, cnt);
+	}
+
+	static int getTaste() throws IOException {
+		int a, b;
+		int sum = 0;
+		for (int i = 0; i < K; i++) {
+			for (int j = i + 1; j < K; j++) {
+				a = lst[i];
+				b = lst[j];
+				sum += arr[a][b];
+			}
+		}
+		return sum;
 	}
 
 	static void stk() throws IOException {
