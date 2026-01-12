@@ -7,9 +7,7 @@ public class Main {
 	static StringBuilder sb = new StringBuilder();
 
 	static int N;
-	static int[] arr;
-	static boolean flag;
-	static String str1, str2;
+	static int[] lst;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -21,54 +19,39 @@ public class Main {
 	}
 
 	static void pro() throws IOException {
-		arr = new int[N];
+		lst = new int[N];
+
 		recur(0);
-		flag = false;
 	}
 
 	static void recur(int cur) throws IOException {
 		if (!check(cur))
 			return;
 		if (cur == N) {
-			flag = true;
 			for (int i = 0; i < N; i++) {
-				System.out.print(arr[i]);
+				System.out.print(lst[i]);
 			}
-			System.out.println();
+			System.exit(0);
 			return;
 		}
 
 		for (int i = 1; i <= 3; i++) {
-			arr[cur] = i;
+			lst[cur] = i;
 			recur(cur + 1);
 		}
 	}
 
 	static boolean check(int cur) throws IOException {
-		if (flag)
-			return false;
-		if (cur <= 1)
+		if (cur < 2)
 			return true;
-		if (arr[cur - 1] == arr[cur - 2])
-			return false;
-		for (int i = 0; i < cur; i++) {
-			for (int j = i; j < cur; j++) {
-				sb = new StringBuilder();
-				for (int k = i; k <= j; k++) {
-					sb.append(arr[k]);
-				}
-				str1 = sb.toString();
-
-				sb = new StringBuilder();
-				for (int k = j + 1; k <= j + 1 + (j - i); k++) {
-					if (k >= cur)
-						continue;
-					sb.append(arr[k]);
-				}
-				str2 = sb.toString();
-				if (str1.equals(str2))
-					return false;
+		for (int n = 1; n <= cur / 2; n++) {
+			int cnt = 0;
+			for (int i = 1; i <= n; i++) {
+				if (lst[cur - i] == lst[cur - n - i])
+					cnt++;
 			}
+			if (cnt == n)
+				return false;
 		}
 		return true;
 	}
