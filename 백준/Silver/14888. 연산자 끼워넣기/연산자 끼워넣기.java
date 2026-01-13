@@ -7,12 +7,9 @@ public class Main {
 	static StringBuilder sb = new StringBuilder();
 
 	static int N;
-	static int[] num;
-	static int[] oper;
-	static char[] arr;
-	static List<Character> list = new ArrayList<>();
-	static boolean[] visited;
-	static int min, max;
+	static int[] arr, cnt, lst;
+	static int max = Integer.MIN_VALUE;
+	static int min = Integer.MAX_VALUE;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -21,82 +18,68 @@ public class Main {
 
 	static void input() throws IOException {
 		N = Integer.parseInt(br.readLine());
-		num = new int[N];
+		arr = new int[N];
 		stk();
 		for (int i = 0; i < N; i++) {
-			num[i] = Integer.parseInt(st.nextToken());
+			arr[i] = Integer.parseInt(st.nextToken());
 		}
-		oper = new int[4];
+
+		cnt = new int[4];
 		stk();
-		// 0:덧셈, 1:뺄셈, 2:곱셈, 3:나눗셈
 		for (int i = 0; i < 4; i++) {
-			oper[i] = Integer.parseInt(st.nextToken());
-			if (oper[i] == 0)
-				continue;
-			for (int j = 0; j < oper[i]; j++) {
-				if (i == 0) {
-					list.add('+');
-				} else if (i == 1) {
-					list.add('-');
-				} else if (i == 2) {
-					list.add('*');
-				} else
-					list.add('/');
-			}
+			cnt[i] = Integer.parseInt(st.nextToken());
 		}
 	}
 
 	static void pro() throws IOException {
-		arr = new char[N - 1];
-		visited = new boolean[N - 1];
-		min = Integer.MAX_VALUE;
-		max = Integer.MIN_VALUE;
+		lst = new int[N];
+
 		recur(0);
+
 		System.out.println(max);
 		System.out.println(min);
 	}
 
 	static void recur(int cur) throws IOException {
 		if (cur == N - 1) {
-			check();
+			int res = getCal();
+			max = Math.max(max, res);
+			min = Math.min(min, res);
 			return;
 		}
-		for (int i = 0; i < N - 1; i++) {
-			if (visited[i])
+
+		for (int i = 0; i < 4; i++) {
+			if (cnt[i] == 0)
 				continue;
-			arr[cur] = list.get(i);
-			visited[i] = true;
+			lst[cur] = i;
+			cnt[i]--;
 			recur(cur + 1);
-			visited[i] = false;
+			cnt[i]++;
 		}
 	}
 
-	static void check() throws IOException {
-		int tmp = num[0];
-		for (int i = 0; i < N - 1; i++) {
-			tmp = cal(tmp, i);
+	static int getCal() throws IOException {
+		int i = 0;
+		int res = arr[i];
+		while (i < N - 1) {
+			res = cal(res, arr[i + 1], lst[i]);
+			i++;
 		}
-		min = Math.min(min, tmp);
-		max = Math.max(max, tmp);
+		return res;
 	}
 
-	static int cal(int a, int idx) throws IOException {
-		int tmp = 0;
-		switch (arr[idx]) {
-		case '+':
-			tmp = a + num[idx + 1];
-			break;
-		case '-':
-			tmp = a - num[idx + 1];
-			break;
-		case '*':
-			tmp = a * num[idx + 1];
-			break;
-		case '/':
-			tmp = a / num[idx + 1];
-			break;
+	static int cal(int a, int b, int idx) throws IOException {
+		switch (idx) {
+		case 0:
+			return a + b;
+		case 1:
+			return a - b;
+		case 2:
+			return a * b;
+		case 3:
+			return a / b;
 		}
-		return tmp;
+		return 0;
 	}
 
 	static void stk() throws IOException {
