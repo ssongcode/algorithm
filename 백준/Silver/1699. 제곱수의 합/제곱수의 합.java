@@ -39,7 +39,7 @@ public class Main {
 			return dp[x];
 
 		int ret = Integer.MAX_VALUE;
-		for (int i = 1; i * i <= N; i++) {
+		for (int i = 1; i * i <= x; i++) {
 			ret = Math.min(ret, recur(x - i * i) + 1);
 		}
 
